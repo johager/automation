@@ -12,15 +12,19 @@ afterAll(async () => {
     await (await driver).quit()
 })
 
-test('delete a movie', async () => {
-    // make a movie
-    const movieTitle = 'Tenet'
+async function makeMovie(movieTitle) {
     const inputField = await driver.findElement(By.xpath('//input'))
-    await inputField.sendKeys('Tenet')
+    await inputField.sendKeys(movieTitle)
     await (await driver).sleep(2000)
     const movieButton = await driver.findElement(By.css('button'))
     await movieButton.click()
     await (await driver).sleep(2000)
+}
+
+test('delete a movie', async () => {
+    // make a movie
+    const movieTitle = 'Tenet'
+    await makeMovie(movieTitle)
 
     // delete the movie
     const deleteButton = await driver.findElement(By.id(movieTitle))
@@ -36,12 +40,7 @@ test('delete a movie', async () => {
 test('cross off a movie', async () => {
     // make a movie
     const movieTitle = 'Tenet'
-    const inputField = await driver.findElement(By.xpath('//input'))
-    await inputField.sendKeys(movieTitle)
-    await (await driver).sleep(2000)
-    const movieButton = await driver.findElement(By.css('button'))
-    await movieButton.click()
-    await (await driver).sleep(2000)
+    await makeMovie(movieTitle)
 
     // cross off the movie
     const movieSpan = await driver.findElement(By.xpath('//ul/li/span'))
@@ -57,12 +56,7 @@ test('cross off a movie', async () => {
 test('delete a movie and check notification', async () => {
     // make a movie
     const movieTitle = 'Tenet'
-    const inputField = await driver.findElement(By.xpath('//input'))
-    await inputField.sendKeys(movieTitle)
-    await (await driver).sleep(2000)
-    const movieButton = await driver.findElement(By.css('button'))
-    await movieButton.click()
-    await (await driver).sleep(2000)
+    await makeMovie(movieTitle)
 
     // delete the movie
     await driver.findElement(By.id(movieTitle)).click()
