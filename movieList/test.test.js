@@ -15,10 +15,8 @@ afterAll(async () => {
 async function makeMovie(movieTitle) {
     const inputField = await driver.findElement(By.xpath('//input'))
     await inputField.sendKeys(movieTitle)
-    await (await driver).sleep(2000)
     const movieButton = await driver.findElement(By.css('button'))
     await movieButton.click()
-    await (await driver).sleep(2000)
 }
 
 test('delete a movie', async () => {
