@@ -29,7 +29,6 @@ test('delete a movie', async () => {
     // delete the movie
     const deleteButton = await driver.findElement(By.id(movieTitle))
     await deleteButton.click()
-    await (await driver).sleep(2000)
 
     // confirm that there aren't any movies
     const ulInnerHtml = await driver.findElement(By.xpath('//ul')).getAttribute('innerHTML')
@@ -45,7 +44,6 @@ test('cross off a movie', async () => {
     // cross off the movie
     const movieSpan = await driver.findElement(By.xpath('//ul/li/span'))
     await movieSpan.click()
-    await (await driver).sleep(2000)
 
     // check the class on the movie title span
     const movieClass = await movieSpan.getAttribute("class")
@@ -60,7 +58,7 @@ test('delete a movie and check notification', async () => {
 
     // delete the movie
     await driver.findElement(By.id(movieTitle)).click()
-    await (await driver).sleep(2000)
+    await driver.sleep(2000)
 
     // check the notification
     const asideClass = await driver.findElement(By.xpath('//aside')).getAttribute("class")
