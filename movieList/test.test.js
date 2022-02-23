@@ -19,47 +19,67 @@ async function makeMovie(movieTitle) {
     await movieButton.click()
 }
 
-test('delete a movie', async () => {
-    // make a movie
-    const movieTitle = 'Tenet'
-    await makeMovie(movieTitle)
+describe('delete movie', () => {
+    test('movie removed from list', async () => {
+        // make a movie
+        const movieTitle = 'Tenet'
+        await makeMovie(movieTitle)
 
-    // delete the movie
-    const deleteButton = await driver.findElement(By.id(movieTitle))
-    await deleteButton.click()
+        // delete the movie
+        const deleteButton = await driver.findElement(By.id(movieTitle))
+        await deleteButton.click()
 
-    // confirm that there aren't any movies
-    const ulInnerHtml = await driver.findElement(By.xpath('//ul')).getAttribute('innerHTML')
+        // confirm that there aren't any movies
+        const ulInnerHtml = await driver.findElement(By.xpath('//ul')).getAttribute('innerHTML')
 
-    expect(ulInnerHtml.length).toBe(0)
+        expect(ulInnerHtml.length).toBe(0)
+    })
+    test('notification is correct', async () => {
+        // make a movie
+        const movieTitle = 'Tenet'
+        await makeMovie(movieTitle)
+    
+        // delete the movie
+        const deleteButton = await driver.findElement(By.id(movieTitle))
+        await deleteButton.click()
+    
+        // check the notification text
+        const asideText = await driver.findElement(By.xpath('//aside')).getText("class")
+    
+        expect(asideText).toBe(`${movieTitle} deleted!`)
+    })
+    test('notification disappears', async () => {
+        // make a movie
+        const movieTitle = 'Tenet'
+        await makeMovie(movieTitle)
+    
+        // delete the movie
+        const deleteButton = await driver.findElement(By.id(movieTitle))
+        await deleteButton.click()
+
+        // wait for the notification to disappear
+        await driver.sleep(2000)
+    
+        // check the notification 
+        const asideClass = await driver.findElement(By.xpath('//aside')).getAttribute("class")
+    
+        expect(asideClass).toBe(`hide`)
+    })
 })
 
-test('cross off a movie', async () => {
-    // make a movie
-    const movieTitle = 'Tenet'
-    await makeMovie(movieTitle)
+describe('cross off a movie', () => {
+    test('movie is crossed off', async () => {
+        // make a movie
+        const movieTitle = 'Tenet'
+        await makeMovie(movieTitle)
 
-    // cross off the movie
-    const movieSpan = await driver.findElement(By.xpath('//ul/li/span'))
-    await movieSpan.click()
+        // cross off the movie
+        const movieSpan = await driver.findElement(By.xpath('//ul/li/span'))
+        await movieSpan.click()
 
-    // check the class on the movie title span
-    const movieClass = await movieSpan.getAttribute("class")
+        // check the class on the movie title span
+        const movieClass = await movieSpan.getAttribute("class")
 
-    expect(movieClass).toBe('checked')
-})
-
-test('delete a movie and check notification', async () => {
-    // make a movie
-    const movieTitle = 'Tenet'
-    await makeMovie(movieTitle)
-
-    // delete the movie
-    await driver.findElement(By.id(movieTitle)).click()
-    await driver.sleep(2000)
-
-    // check the notification
-    const asideClass = await driver.findElement(By.xpath('//aside')).getAttribute("class")
-
-    expect(asideClass).toBe(`hide`)
+        expect(movieClass).toBe('checked')
+    })
 })
